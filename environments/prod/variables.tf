@@ -25,3 +25,9 @@ variable "vm_image" {
   default = "debian-cloud/debian-11"
 }
 
+variable "my_ip" {
+  type        = string
+  description = " public IP address"
+}
+
+
