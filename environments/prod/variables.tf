@@ -1,7 +1,9 @@
-variable "project_id"    { type = string }
-variable "region"        { type = string }
-variable "network_name"  { type = string }
-variable "my_ip"         { type = string } # From Cloud Build
-variable "subnet_config" {
-  type = map(object({ cidr = string }))
+variable "machine_type" {
+  type        = string
+  description = "The size of the VM"
+}
+
+variable "vm_image" {
+  type        = string
+  description = "The OS image for the VM"
 }
