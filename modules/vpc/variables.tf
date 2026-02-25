@@ -1,7 +1,10 @@
-variable "network_name" { type = string }
-variable "region"       { type = string }
-variable "subnet_config" {
+variable "project_id" { type = string }
+variable "region"     { type = string }
+variable "vpc_name"   { type = string }
+
+variable "subnets" {
   type = map(object({
     cidr = string
   }))
 }
+
