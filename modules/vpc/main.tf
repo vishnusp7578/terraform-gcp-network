@@ -1,15 +1,27 @@
-resource "google_compute_network" "main" {
-  name                    = var.network_name
+resource "google_compute_network" "vpc" {
+  name    = var.vpc_name
   auto_create_subnetworks = false
 }
 
-resource "google_compute_subnetwork" "subnets" {
-  for_each      = var.subnet_config
+resource "google_compute_subnetwork" "subnet" {
+  for_each      = var.subnets
   name          = each.key
   ip_cidr_range = each.value.cidr
   region        = var.region
-  network       = google_compute_network.main.id
-  private_ip_google_access = true
+  network       = google_compute_network.vpc.id
 }
+
+# Firewall rule to allow internal communication (Ping/ICMP)
+resource "google_compute_firewall" "allow_internal" {
+  name    = "${var.vpc_name}-allow-internal"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "icmp"
+  }
+
+  source_ranges = [for s in google_compute_subnetwork.subnet : s.ip_cidr_range]
+}
+
 
 
