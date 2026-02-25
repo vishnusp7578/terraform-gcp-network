@@ -1,7 +1,15 @@
-variable "name"         { type = string }
-variable "zone"         { type = string }
-variable "subnet_id"    { type = string }
-variable "tags"         { type = list(string) }
+variable "project_id"   { type = string }
+variable "vpc_id"       { type = string }
 variable "machine_type" { type = string }
-variable "vm_image"     { type = string }
+
+variable "subnet_links" {
+  description = "Map of subnet names to their self_links"
+  type        = map(string)
+}
+
+variable "region" {
+  type    = string
+  default = "us-central1"
+}
+
 
