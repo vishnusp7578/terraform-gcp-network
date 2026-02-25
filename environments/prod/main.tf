@@ -1,37 +1,32 @@
-provider "google" {
-  project = var.project_id
-  region  = var.region
-}
-
 module "vpc" {
-  source   = "../../modules/vpc"
-  vpc_name = "custom-vpc"
-  region   = var.region
-  subnets  = var.subnets
+  source       = "../../modules/vpc"
+  network_name = "prod-vpc"
+  region       = "us-central1"
+  subnet_config = {
+    "subnet-a" = { cidr = "10.0.1.0/24" }
+    "subnet-b" = { cidr = "10.0.2.0/24" }
+  }
 }
 
 module "firewall" {
-  source          = "../../modules/firewall"
-  network         = module.vpc.vpc_id
-  admin_ip        = var.admin_ip
-  internal_ranges = ["10.10.0.0/16"]
+  source     = "../../modules/firewall"
+  network_id = module.vpc.network_id
+  admin_ip   = var.my_ip
 }
 
-module "compute" {
-  source = "../../modules/compute"
-
-  instances = {
-    vm-a = {
-      zone   = "us-central1-a"
-      subnet = module.vpc.subnet_ids["subnet-a"]
-      tags   = ["ssh", "web"]
-    }
-    vm-b = {
-      zone   = "us-central1-b"
-      subnet = module.vpc.subnet_ids["subnet-b"]
-      tags   = ["ssh"]
-    }
-  }
-
-  sa_name = "vm-service-account"
+module "vm_a" {
+  source    = "../../modules/compute"
+  name      = "vm-a"
+  zone      = "us-central1-a"
+  subnet_id = module.vpc.subnet_ids["subnet-a"]
+  tags      = ["ssh-enabled", "web-server"]
 }
+
+module "vm_b" {
+  source    = "../../modules/compute"
+  name      = "vm-b"
+  zone      = "us-central1-b"
+  subnet_id = module.vpc.subnet_ids["subnet-b"]
+  tags      = ["ssh-enabled"]
+}
+
