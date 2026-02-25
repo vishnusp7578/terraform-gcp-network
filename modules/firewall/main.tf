@@ -1,0 +1,45 @@
+# Rule 1: Allow SSH (Port 22) ONLY from your IP
+resource "google_compute_firewall" "allow_ssh_my_ip" {
+  name    = "allow-ssh-from-home"
+  network = var.network_name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  # Replace with your actual IP variable
+  source_ranges = [var.my_ip]
+  
+  # Target: Applies only to VMs using this service account
+  target_service_accounts = [google_service_account.vm_sa.email]
+  
+}
+
+# Rule 2: Allow HTTP (Port 80) from ANYWHERE
+resource "google_compute_firewall" "allow_http" {
+  name    = "allow-http-anywhere"
+  network = var.network_name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["web-server"]
+}
+
+# Rule 3: Allow HTTPS (Port 443) from ANYWHERE
+resource "google_compute_firewall" "allow_https" {
+  name    = "allow-https-anywhere"
+  network = var.network_name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["web-server"]
+}
