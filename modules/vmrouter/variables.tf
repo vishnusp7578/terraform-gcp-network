@@ -21,3 +21,9 @@ variable "vpc_id" {
   type        = string
   description = "The ID of the VPC network"
 }
+
+variable "machine_type" {
+  type        = string
+  description = "The machine type for the VMs"
+  default     = "e2-micro"
+}
