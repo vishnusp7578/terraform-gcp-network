@@ -8,7 +8,6 @@ steps:
   - name: 'hashicorp/terraform:1.6.0'
     args: 
       - 'plan'
-      - '-var=my_ip=${_MY_IP}'
       - '-out=tfplan'
     dir: 'environments/prod'
 
@@ -17,11 +16,9 @@ steps:
     args: ['apply', '-auto-approve', 'tfplan']
     dir: 'environments/prod'
 
-substitutions:
-  _MY_IP: '0.0.0.0/0' # Override this in the Cloud Build Trigger settings
-
 options:
   logging: CLOUD_LOGGING_ONLY
+
 
 
 
