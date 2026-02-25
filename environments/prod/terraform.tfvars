@@ -1,9 +1,20 @@
-project_id = "vishnu-eval"
-region     = "us-central1"
+# Project-level configuration
+project_id   = "vishnu-eval"
+region       = "us-central1"
 
-admin_ip = "34.142.169.226/32"
+# VPC Configuration
+# These values are passed into the VPC module
+network_name = "production-vpc"
 
-subnets = {
-  subnet-a = { cidr = "10.10.1.0/24" }
-  subnet-b = { cidr = "10.10.2.0/24" }
+subnet_config = {
+  "us-central1-a-subnet" = {
+    cidr = "10.0.1.0/24"
+  },
+  "us-central1-b-subnet" = {
+    cidr = "10.0.2.0/24"
+  }
 }
+
+# VM Configuration
+machine_type = "e2-micro"
+vm_image     = "debian-cloud/debian-11"
