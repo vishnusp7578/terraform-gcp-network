@@ -7,3 +7,8 @@ output "internal_ips" {
   }
 }
 
+output "vm_sa_email" {
+  value       = google_service_account.vm_sa.email
+  description = "The email of the custom service account"
+}
+
