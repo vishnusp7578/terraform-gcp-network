@@ -33,6 +33,7 @@ module "routervm" {
   subnet_links = module.vpc.subnet_links
   machine_type = var.machine_type
   vm_sa_email  = module.compute.vm_sa_email 
+  router_vm = var.router_vm
 }
 
 module "lab_route" {
@@ -44,6 +45,7 @@ module "lab_route" {
   next_hop_instance_zone = "${var.region}-a"
   priority               = 1000
 }
+
 
 
 
