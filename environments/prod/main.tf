@@ -40,10 +40,11 @@ module "lab_route" {
   route_name             = "route-to-lab-vpn"
   dest_range             = "10.50.0.0/16"
   network_name           = module.vpc.vpc_name
-  next_hop_instance      = module.compute.router_vm_name
+  next_hop_instance      = module.vmrouter.router_vm
   next_hop_instance_zone = "${var.region}-a"
   priority               = 1000
 }
+
 
 
 
