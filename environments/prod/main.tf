@@ -15,18 +15,23 @@ module "firewall" {
 }
 
 module "vm_a" {
-  source    = "../../modules/compute"
-  name      = "vm-a"
-  zone      = "us-central1-a"
-  subnet_id = module.vpc.subnet_ids["subnet-a"]
-  tags      = ["ssh-enabled", "web-server"]
+  source       = "../../modules/compute"
+  name         = "vm-a"
+  zone         = "${var.region}-a"
+  subnet_id    = module.vpc.subnet_ids["subnet-a"]
+  tags         = ["ssh-enabled"]
+  machine_type = var.machine_type
+  vm_image     = var.vm_image
 }
 
 module "vm_b" {
-  source    = "../../modules/compute"
-  name      = "vm-b"
-  zone      = "us-central1-b"
-  subnet_id = module.vpc.subnet_ids["subnet-b"]
-  tags      = ["ssh-enabled"]
+  source       = "../../modules/compute"
+  name         = "vm-b"
+  zone         = "${var.region}-b"
+  subnet_id    = module.vpc.subnet_ids["subnet-b"]
+  tags         = ["ssh-enabled"]
+  machine_type = var.machine_type
+  vm_image     = var.vm_image
 }
+
 
