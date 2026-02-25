@@ -1,5 +1,5 @@
 resource "google_compute_instance" "router_vm" {
-  name         = "var.router_vm"
+  name         = var.router_vm
   machine_type = "e2-medium" # Routing can be CPU intensive; avoid micro for this
   zone         = "${var.region}-a"
 
@@ -18,7 +18,7 @@ resource "google_compute_instance" "router_vm" {
   }
 
   service_account {
-    email  = var.vm_sa.email
+    email  = var.vm_sa_email
     scopes = ["cloud-platform"]
   }
 }
