@@ -46,14 +46,63 @@ module "lab_route" {
   priority               = 1000
 }
 
-module "test_na" {
-  source           = "../../modules/nat"
-  project_id       = var.project_id
-  region           = var.region
-  vpc_id           = module.vpc.vpc_id
-  network_name     = module.vpc.vpc_name
-  target_subnet_id = module.vpc.subnet_links["subnet-a"]
+# Create VPC A
+module "vpc_a" {
+  source       = "../../modules/vpc"
+  network_name = "network-a"
+  subnet_cidr  = "10.1.0.0/24"
+  region       = var.region
 }
+
+# Create VPC B
+module "vpc_b" {
+  source       = "../../modules/vpc"
+  network_name = "network-b"
+  subnet_cidr  = "10.2.0.0/24"
+  region       = var.region
+}
+
+# Connect them via Peering
+module "vpc_peering" {
+  source     = "../../modules/peering"
+  vpc_a_id   = module.vpc_a.vpc_id
+  vpc_a_name = module.vpc_a.vpc_name
+  vpc_b_id   = module.vpc_b.vpc_id
+  vpc_b_name = module.vpc_b.vpc_name
+}
+
+# --- Firewall Rule for VPC A (Allow traffic from VPC B) ---
+resource "google_compute_firewall" "allow_peer_b" {
+  name    = "allow-traffic-from-b"
+  network = module.vpc_a.vpc_name
+
+  allow {
+    protocol = "icmp"
+  }
+  allow {
+    protocol = "tcp"
+    ports    = ["22", "80"]
+  }
+
+  source_ranges = ["10.2.0.0/24"] # VPC B's CIDR
+}
+
+# --- Firewall Rule for VPC B (Allow traffic from VPC A) ---
+resource "google_compute_firewall" "allow_peer_a" {
+  name    = "allow-traffic-from-a"
+  network = module.vpc_b.vpc_name
+
+  allow {
+    protocol = "icmp"
+  }
+  allow {
+    protocol = "tcp"
+    ports    = ["22", "80"]
+  }
+
+  source_ranges = ["10.1.0.0/24"] # VPC A's CIDR
+}
+
 
 
 
