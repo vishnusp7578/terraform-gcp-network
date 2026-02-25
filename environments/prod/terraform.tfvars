@@ -1,5 +1,8 @@
-project_id = "my-gcp-project-123"
-region     = "us-central1"
+project_id   = "your-project-id-here"
+region       = "us-central1"
+machine_type = "e2-micro"
+vm_image     = "debian-cloud/debian-11"
+
 subnets = {
   "subnet-a" = { cidr = "10.0.1.0/24" }
   "subnet-b" = { cidr = "10.0.2.0/24" }
