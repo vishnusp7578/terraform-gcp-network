@@ -14,3 +14,9 @@ variable "subnet_config" {
     cidr = string
   }))
 }
+
+variable "region" {
+  type        = string
+  description = "The GCP region where resources will be created"
+}
+
