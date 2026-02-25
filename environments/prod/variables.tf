@@ -1,27 +1,27 @@
-variable "machine_type" {
+variable "project_id" {
   type        = string
-  description = "The size of the VM"
-}
-
-variable "vm_image" {
-  type        = string
-  description = "The OS image for the VM"
-}
-
-variable "subnet_config" {
-  description = "A map of subnet names to their CIDR blocks"
-  type = map(object({
-    cidr = string
-  }))
+  description = "The GCP Project ID"
 }
 
 variable "region" {
   type        = string
-  description = "The GCP region where resources will be created"
+  default     = "us-central1"
 }
 
-variable "my_ip" {
-  type        = string
-  description = "The public IP address allowed to SSH into the VMs, passed from the CI/CD pipeline."
+variable "subnets" {
+  type = map(object({
+    cidr = string
+  }))
+  description = "Map of subnet names to CIDR ranges"
+}
+
+variable "machine_type" {
+  type    = string
+  default = "e2-micro"
+}
+
+variable "vm_image" {
+  type    = string
+  default = "debian-cloud/debian-11"
 }
 
