@@ -17,6 +17,15 @@ module "compute" {
   # vm_image   = var.vm_image 
 }
 
+module "firewall" {
+  source       = "../../modules/firewall"
+  project_id   = var.project_id
+  network_name = module.vpc.vpc_name      # Output from VPC module
+  my_ip        = var.my_ip               # From your variables.tf
+  vm_sa_email  = module.compute.vm_sa_email # Output from Compute module
+}
+
+
 
 
 
