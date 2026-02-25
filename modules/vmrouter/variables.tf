@@ -27,3 +27,8 @@ variable "machine_type" {
   description = "The machine type for the VMs"
   default     = "e2-micro"
 }
+
+variable "project_id" {
+  type        = string
+  description = "The GCP project ID"
+}
