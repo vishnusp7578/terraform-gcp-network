@@ -12,5 +12,4 @@ resource "google_compute_subnetwork" "subnets" {
   private_ip_google_access = true
 }
 
-output "network_id" { value = google_compute_network.main.id }
-output "subnet_ids" { value = { for k, v in google_compute_subnetwork.subnets : k => v.id } }
+
