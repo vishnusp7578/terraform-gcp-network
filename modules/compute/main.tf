@@ -1,30 +1,29 @@
-# This name "sa" must match the reference below
-resource "google_service_account" "sa" {
-  account_id   = "${var.name}-sa"
-  display_name = "Service Account for ${var.name}"
+resource "google_service_account" "vm_sa" {
+  account_id   = "vm-internal-sa"
+  display_name = "Custom VM Service Account"
 }
 
 resource "google_compute_instance" "vm" {
-  name         = var.name
-  machine_type = var.machine_type # Use the variable passed from root
-  zone         = var.zone
-  tags         = var.tags
+  for_each     = var.subnet_links
+  name         = "vm-${each.key}"
+  machine_type = var.machine_type
+  zone         = "${var.region}-${substr(each.key, -1, 1)}" # Dynamic zone mapping
 
   boot_disk {
     initialize_params {
-      image = var.vm_image # Use the variable passed from root
+      image = "debian-cloud/debian-11"
     }
   }
 
   network_interface {
-    subnetwork = var.subnet_id
-    access_config {}
+    subnetwork = each.value
+    # Omitting access_config block makes the VM private (internal only)
   }
 
   service_account {
-    # This must match the resource block name above
-    email  = google_service_account.sa.email 
+    email  = google_service_account.vm_sa.email
     scopes = ["cloud-platform"]
   }
 }
+
 
