@@ -1,3 +1,5 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
 steps:
 # 1️⃣ Terraform Init
 - id: "terraform-init"
@@ -43,3 +45,4 @@ steps:
   args:
     - -c
     - terraform apply -auto-approve tfplan
+
