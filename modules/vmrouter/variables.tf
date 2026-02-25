@@ -17,3 +17,7 @@ variable "vm_sa_email" {
   type        = string
   description = "The email of the service account to attach to the router"
 }
+variable "vpc_id" {
+  type        = string
+  description = "The ID of the VPC network"
+}
