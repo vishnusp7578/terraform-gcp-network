@@ -27,12 +27,8 @@ resource "google_compute_instance" "vm" {
 # Use tags for the Web Rules
   tags = ["web-server"]
 
-  service_account {
-    # This matches the 'target_service_accounts' in the SSH rule
-    email  = google_service_account.vm_sa.email
-    scopes = ["cloud-platform"]
-  }
 }
+
 
 
 
