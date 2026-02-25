@@ -53,14 +53,14 @@ module "vpc_a" {
   vpc_name   = "network-a"
   region     = var.region
   
-  # The module expects a "subnets" argument (likely a list of maps)
-  subnets = [
-    {
+  # CHANGED: Using { } for a map instead of [ ] for a list
+  subnets = {
+    "subnet-a" = {
       subnet_name   = "subnet-a"
       subnet_ip     = "10.1.0.0/24"
       subnet_region = var.region
     }
-  ]
+  }
 }
 
 # --- VPC B ---
@@ -70,13 +70,14 @@ module "vpc_b" {
   vpc_name   = "network-b"
   region     = var.region
 
-  subnets = [
-    {
+  # CHANGED: Using { } for a map
+  subnets = {
+    "subnet-b" = {
       subnet_name   = "subnet-b"
       subnet_ip     = "10.2.0.0/24"
       subnet_region = var.region
     }
-  ]
+  }
 }
 
 # --- Peering ---
@@ -87,7 +88,6 @@ module "vpc_peering" {
   vpc_b_id   = module.vpc_b.vpc_id
   vpc_b_name = module.vpc_b.vpc_name
 }
-
 # --- Firewall Rule for VPC A (Allow traffic from VPC B) ---
 resource "google_compute_firewall" "allow_peer_b" {
   name    = "allow-traffic-from-b"
@@ -119,6 +119,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = ["10.1.0.0/24"] # VPC A's CIDR
 }
+
 
 
 
