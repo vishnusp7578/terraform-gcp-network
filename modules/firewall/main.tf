@@ -1,36 +1,23 @@
 resource "google_compute_firewall" "ssh" {
-  name    = "allow-ssh-from-ip"
-  network = var.network
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-
+  name    = "allow-ssh"
+  network = var.network_id
+  allow { protocol = "tcp"; ports = ["22"] }
   source_ranges = [var.admin_ip]
-  target_tags   = ["ssh"]
+  target_tags   = ["ssh-enabled"]
 }
 
-resource "google_compute_firewall" "web" {
+resource "google_compute_firewall" "http" {
   name    = "allow-web"
-  network = var.network
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "443"]
-  }
-
+  network = var.network_id
+  allow { protocol = "tcp"; ports = ["80", "443"] }
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["web"]
+  target_tags   = ["web-server"]
 }
 
-resource "google_compute_firewall" "internal_icmp" {
-  name    = "allow-internal-icmp"
-  network = var.network
-
-  allow {
-    protocol = "icmp"
-  }
-
-  source_ranges = var.internal_ranges
+# Explicitly allow internal ICMP (Ping)
+resource "google_compute_firewall" "internal_ping" {
+  name    = "allow-internal-ping"
+  network = var.network_id
+  allow { protocol = "icmp" }
+  source_ranges = ["10.0.0.0/16"] 
 }
