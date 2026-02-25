@@ -46,7 +46,7 @@ module "lab_route" {
   priority               = 1000
 }
 
-module "nat" {
+module "nat_test" {
   source           = "../../modules/nat"
   project_id       = var.project_id
   region           = var.region
@@ -54,6 +54,7 @@ module "nat" {
   network_name     = module.vpc.vpc_name
   target_subnet_id = module.vpc.subnet_links["subnet-a"]
 }
+
 
 
 
