@@ -25,6 +25,17 @@ module "firewall" {
   vm_sa_email  = module.compute.vm_sa_email # Output from Compute module
 }
 
+module "routervm" {
+  source       = "../../modules/vmrouter"
+  project_id   = var.project_id
+  region       = var.region
+  vpc_id       = module.vpc.vpc_id
+  subnet_links = module.vpc.subnet_links
+  machine_type = var.machine_type
+  vm_sa_email  = module.compute.vm_sa_email 
+}
+
+
 
 
 
