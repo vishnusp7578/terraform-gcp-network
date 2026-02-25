@@ -1,38 +1,24 @@
-resource "google_service_account" "vm_sa" {
-  account_id   = var.sa_name
-  display_name = "VM Service Account"
-}
-
 resource "google_compute_instance" "vm" {
-  for_each = var.instances
-
-  name         = each.key
-  machine_type = "e2-medium"
-  zone         = each.value.zone
+  name         = var.name
+  machine_type = "e2-micro"
+  zone         = var.zone
+  tags         = var.tags
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-12"
+      image = "debian-cloud/debian-11"
     }
   }
 
   network_interface {
-    subnetwork = each.value.subnet
-    access_config {} # ephemeral external IP
+    subnetwork = var.subnet_id
+    access_config {
+      # Leaving this empty assigns an ephemeral external IP
+    }
   }
 
   service_account {
-    email  = google_service_account.vm_sa.email
-    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
-  }
-
-  tags = each.value.tags
-
-  metadata = {
-    enable-oslogin = "TRUE"
-  }
-
-  shielded_instance_config {
-    enable_secure_boot = true
+    email  = google_service_account.sa.email
+    scopes = ["cloud-platform"]
   }
 }
