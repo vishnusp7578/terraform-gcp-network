@@ -12,7 +12,7 @@ resource "google_compute_firewall" "allow_ssh_my_ip" {
   source_ranges = [var.my_ip]
   
   # Target: Applies only to VMs using this service account
-  target_service_accounts = [google_service_account.vm_sa.email]
+  target_service_accounts = [var.vm_sa_email]
   
 }
 
