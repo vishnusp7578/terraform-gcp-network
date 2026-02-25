@@ -30,4 +30,9 @@ variable "my_ip" {
   description = " public IP address"
 }
 
+variable "router_vm" {
+  type        = string
+  description = "The VM ID"
+}
+
 
