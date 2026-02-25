@@ -28,7 +28,7 @@ variable "machine_type" {
   default     = "e2-micro"
 }
 
-variable "project_id" {
+variable "router_vm" {
   type        = string
-  description = "The GCP project ID"
+  description = "The VM ID"
 }
