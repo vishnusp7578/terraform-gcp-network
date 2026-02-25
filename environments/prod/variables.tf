@@ -20,3 +20,8 @@ variable "region" {
   description = "The GCP region where resources will be created"
 }
 
+variable "my_ip" {
+  type        = string
+  description = "The public IP address allowed to SSH into the VMs, passed from the CI/CD pipeline."
+}
+
