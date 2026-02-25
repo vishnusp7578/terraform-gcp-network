@@ -46,23 +46,40 @@ module "lab_route" {
   priority               = 1000
 }
 
-# Create VPC A
+# --- VPC A ---
 module "vpc_a" {
-  source       = "../../modules/vpc"
-  network_name = "network-a"
-  subnet_cidr  = "10.1.0.0/24"
-  region       = var.region
+  source     = "../../modules/vpc"
+  project_id = var.project_id
+  vpc_name   = "network-a"
+  region     = var.region
+  
+  # The module expects a "subnets" argument (likely a list of maps)
+  subnets = [
+    {
+      subnet_name   = "subnet-a"
+      subnet_ip     = "10.1.0.0/24"
+      subnet_region = var.region
+    }
+  ]
 }
 
-# Create VPC B
+# --- VPC B ---
 module "vpc_b" {
-  source       = "../../modules/vpc"
-  network_name = "network-b"
-  subnet_cidr  = "10.2.0.0/24"
-  region       = var.region
+  source     = "../../modules/vpc"
+  project_id = var.project_id
+  vpc_name   = "network-b"
+  region     = var.region
+
+  subnets = [
+    {
+      subnet_name   = "subnet-b"
+      subnet_ip     = "10.2.0.0/24"
+      subnet_region = var.region
+    }
+  ]
 }
 
-# Connect them via Peering
+# --- Peering ---
 module "vpc_peering" {
   source     = "../../modules/peering"
   vpc_a_id   = module.vpc_a.vpc_id
@@ -102,6 +119,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = ["10.1.0.0/24"] # VPC A's CIDR
 }
+
 
 
 
