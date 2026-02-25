@@ -1,5 +1,5 @@
 resource "google_compute_instance" "router_vm" {
-  name         = "router-vm"
+  name         = "var.router_vm"
   machine_type = "e2-medium" # Routing can be CPU intensive; avoid micro for this
   zone         = "${var.region}-a"
 
