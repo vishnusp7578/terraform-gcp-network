@@ -56,7 +56,7 @@ module "vpc_a" {
   subnets    = {
     "subnet-a" = {
       subnet_name   = "subnet-a"
-      subnet_ip     = "10.1.0.0/24"
+      cidr     = "10.1.0.0/24"
       subnet_region = var.region
     }
   }
@@ -70,7 +70,7 @@ module "vpc_b" {
   subnets    = {
     "subnet-b" = {
       subnet_name   = "subnet-b"
-      subnet_ip     = "10.2.0.0/24"
+      cidr     = "10.2.0.0/24"
       subnet_region = var.region
     }
   }
@@ -127,6 +127,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = ["10.1.0.0/24"]
 }
+
 
 
 
