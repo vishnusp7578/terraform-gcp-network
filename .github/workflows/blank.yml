@@ -1,0 +1,50 @@
+name: "Terraform Peering Fix"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows you to run this manually from the Actions tab
+
+jobs:
+  terraform:
+    name: "Terraform Build"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./environments/prod
+
+      # --- THE RESCUE STEP: This fixes the 409 Conflict ---
+      - name: Terraform Import Existing Resources
+        run: |
+          terraform import 'module.vpc_a.google_compute_network.vpc' projects/vishnu-eval/global/networks/network-a || true
+          terraform import 'module.vpc_b.google_compute_network.vpc' projects/vishnu-eval/global/networks/network-b || true
+          terraform import 'module.vpc_a.google_compute_subnetwork.subnet["subnet-a"]' projects/vishnu-eval/regions/us-central1/subnetworks/subnet-a || true
+          terraform import 'module.vpc_b.google_compute_subnetwork.subnet["subnet-b"]' projects/vishnu-eval/regions/us-central1/subnetworks/subnet-b || true
+        working-directory: ./environments/prod
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ./environments/prod
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./environments/prod
