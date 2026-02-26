@@ -47,6 +47,35 @@ module "lab_route" {
 }
 
 # --- VPC A ---
+
+module "vpc_a" {
+  source     = "../../modules/vpc"
+  project_id = var.project_id
+  vpc_name   = "network-a"
+  region     = var.region
+  subnets    = {
+    "subnet-a" = {
+      subnet_name   = "subnet-a"
+      subnet_ip     = "10.1.0.0/24"
+      subnet_region = var.region
+    }
+  }
+}
+
+module "vpc_b" {
+  source     = "../../modules/vpc"
+  project_id = var.project_id
+  vpc_name   = "network-b"
+  region     = var.region
+  subnets    = {
+    "subnet-b" = {
+      subnet_name   = "subnet-b"
+      subnet_ip     = "10.2.0.0/24"
+      subnet_region = var.region
+    }
+  }
+}
+
 data "google_compute_network" "vpc_a" {
   name    = "network-a" 
   project = var.project_id
@@ -98,6 +127,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = ["10.1.0.0/24"]
 }
+
 
 
 
