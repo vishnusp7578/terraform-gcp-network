@@ -76,10 +76,6 @@ module "vpc_b" {
   }
 }
 
-data "google_compute_network" "vpc_a" {
-  name    = "network-a" 
-  project = var.project_id
-}
 
 data "google_compute_network" "vpc_b" {
   name    = "network-b" 
@@ -127,6 +123,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = ["10.1.0.0/24"]
 }
+
 
 
 
