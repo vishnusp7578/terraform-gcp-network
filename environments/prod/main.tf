@@ -89,8 +89,8 @@ data "google_compute_network" "vpc_b" {
 # 2. PEERING MODULE: Create the connection between them
 module "vpc_peering" {
   source     = "../../modules/peering"
-  vpc_a_id   = data.google_compute_network.vpc_a.id
-  vpc_a_name = data.google_compute_network.vpc_a.name
+  vpc_a_id   = module.vpc_a.vpc_id
+  vpc_a_name = module.vpc_a.vpc_name
   vpc_b_id   = data.google_compute_network.vpc_b.id
   vpc_b_name = data.google_compute_network.vpc_b.name
 }
@@ -127,6 +127,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = ["10.1.0.0/24"]
 }
+
 
 
 
