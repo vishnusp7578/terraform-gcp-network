@@ -67,15 +67,6 @@ module "vpc_peering" {
 }
 
 
-
-# --- Peering ---
-module "vpc_peering" {
-  source     = "../../modules/peering"
-  vpc_a_id   = module.vpc_a.vpc_id
-  vpc_a_name = module.vpc_a.vpc_name
-  vpc_b_id   = module.vpc_b.vpc_id
-  vpc_b_name = module.vpc_b.vpc_name
-}
 # --- Firewall Rule for VPC A (Allow traffic from VPC B) ---
 resource "google_compute_firewall" "allow_peer_b" {
   name    = "allow-traffic-from-b"
@@ -107,6 +98,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = [module.vpc_a.subnets["subnet-a"].ip_cidr_range]
 }
+
 
 
 
