@@ -6,9 +6,18 @@ my_ip  = "0.0.0.0/0"
 router_vm = "test-router"
 
 subnets = {
-  "subnet-a" = { cidr = "10.0.1.0/24" }
-  "subnet-b" = { cidr = "10.0.2.0/24" }
+  "subnet-a" = {
+    subnet_name   = "subnet-a"
+    subnet_region = "us-central1"
+    cidr          = "10.0.1.0/24"
+  }
+  "subnet-b" = {
+    subnet_name   = "subnet-b"
+    subnet_region = "us-central1"
+    cidr          = "10.0.2.0/24"
+  }
 }
+
 
 
 
