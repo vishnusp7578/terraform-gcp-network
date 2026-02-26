@@ -4,10 +4,10 @@ resource "google_compute_network" "vpc" {
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  for_each      = var.subnets
-  name          = each.key
-  ip_cidr_range = each.value.cidr
-  region        = var.region
+ for_each      = var.subnets
+  name          = each.value.subnet_name  
+  ip_cidr_range = each.value.cidr       
+  region        = each.value.subnet_region 
   network       = google_compute_network.vpc.id
 }
 
@@ -22,6 +22,7 @@ resource "google_compute_firewall" "allow_internal" {
 
   source_ranges = [for s in google_compute_subnetwork.subnet : s.ip_cidr_range]
 }
+
 
 
 
