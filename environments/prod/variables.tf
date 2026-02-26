@@ -35,14 +35,7 @@ variable "router_vm" {
   description = "The VM ID"
 }
 
-variable "subnets" {
-  type        = map(object({
-    subnet_name = string
-    subnet_ip = string
-    subnet_region = string
-  description = "map of subnet"
-}))
-}
+
 
 
 
