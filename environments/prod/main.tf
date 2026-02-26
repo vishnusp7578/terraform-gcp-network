@@ -47,38 +47,26 @@ module "lab_route" {
 }
 
 # --- VPC A ---
-module "vpc_a" {
-  source     = "../../modules/vpc"
-  project_id = var.project_id
-  vpc_name   = "network-a"
-  region     = var.region
-  
-  # CHANGED: Using { } for a map instead of [ ] for a list
-  subnets = {
-    "subnet-a" = {
-      subnet_name   = "subnet-a"
-      cidr     = "10.1.0.0/24"
-      subnet_region = var.region
-    }
-  }
+data "google_compute_network" "vpc_a" {
+  name    = "network-a" 
+  project = var.project_id
 }
 
-# --- VPC B ---
-module "vpc_b" {
-  source     = "../../modules/vpc"
-  project_id = var.project_id
-  vpc_name   = "network-b"
-  region     = var.region
-
-  # CHANGED: Using { } for a map
-  subnets = {
-    "subnet-b" = {
-      subnet_name   = "subnet-b"
-      cidr     = "10.2.0.0/24"
-      subnet_region = var.region
-    }
-  }
+data "google_compute_network" "vpc_b" {
+  name    = "network-b" 
+  project = var.project_id
 }
+
+# 2. PEERING MODULE: Create the connection between them
+module "vpc_peering" {
+  source     = "../../modules/peering"
+  vpc_a_id   = data.google_compute_network.vpc_a.id
+  vpc_a_name = data.google_compute_network.vpc_a.name
+  vpc_b_id   = data.google_compute_network.vpc_b.id
+  vpc_b_name = data.google_compute_network.vpc_b.name
+}
+
+
 
 # --- Peering ---
 module "vpc_peering" {
@@ -119,6 +107,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = [module.vpc_a.subnets["subnet-a"].ip_cidr_range]
 }
+
 
 
 
