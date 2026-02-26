@@ -9,9 +9,7 @@ resource "google_compute_subnetwork" "subnet" {
   ip_cidr_range = each.value.cidr       
   region        = each.value.subnet_region 
   network       = google_compute_network.vpc.id
-  lifecycle {
-    ignore_changes = all
-  }
+
 }
 
 # Firewall rule to allow internal communication (Ping/ICMP)
@@ -25,6 +23,7 @@ resource "google_compute_firewall" "allow_internal" {
 
   source_ranges = [for s in google_compute_subnetwork.subnet : s.ip_cidr_range]
 }
+
 
 
 
