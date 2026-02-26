@@ -70,7 +70,7 @@ module "vpc_peering" {
 # --- Firewall Rule for VPC A (Allow traffic from VPC B) ---
 resource "google_compute_firewall" "allow_peer_b" {
   name    = "allow-traffic-from-b"
-  network = module.vpc_a.vpc_name
+  network = data.google_compute_network.vpc_a.name
 
   allow {
     protocol = "icmp"
@@ -86,7 +86,7 @@ resource "google_compute_firewall" "allow_peer_b" {
 # --- Firewall Rule for VPC B (Allow traffic from VPC A) ---
 resource "google_compute_firewall" "allow_peer_a" {
   name    = "allow-traffic-from-a"
-  network = module.vpc_b.vpc_name
+  network = data.google_compute_network.vpc_b.name
 
   allow {
     protocol = "icmp"
@@ -98,6 +98,7 @@ resource "google_compute_firewall" "allow_peer_a" {
 
   source_ranges = [module.vpc_a.subnets["subnet-a"].ip_cidr_range]
 }
+
 
 
 
