@@ -10,9 +10,11 @@ variable "region" {
 
 variable "subnets" {
   type = map(object({
-    cidr = string
+    subnet_name   = string
+    subnet_region = string
+    cidr          = string
   }))
-  description = "Map of subnet names to CIDR ranges"
+  description = "Must match the VPC module object schema"
 }
 
 variable "machine_type" {
@@ -34,6 +36,7 @@ variable "router_vm" {
   type        = string
   description = "The VM ID"
 }
+
 
 
 
