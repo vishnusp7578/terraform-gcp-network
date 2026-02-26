@@ -101,7 +101,7 @@ resource "google_compute_firewall" "allow_peer_b" {
     ports    = ["22", "80"]
   }
 
-  source_ranges = ["10.2.0.0/24"] # VPC B's CIDR
+  source_ranges = [module.vpc_b.subnets["subnet-b"].ip_cidr_range]
 }
 
 # --- Firewall Rule for VPC B (Allow traffic from VPC A) ---
@@ -117,8 +117,9 @@ resource "google_compute_firewall" "allow_peer_a" {
     ports    = ["22", "80"]
   }
 
-  source_ranges = ["10.1.0.0/24"] # VPC A's CIDR
+  source_ranges = [module.vpc_a.subnets["subnet-a"].ip_cidr_range]
 }
+
 
 
 
